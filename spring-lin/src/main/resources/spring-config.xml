@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="com.lin"/>
+
+	<bean id="getBeanTest" class="com.lin.pojo.GetBeanTest">
+		<!--
+			获取器注入，一种特殊的方法注入：把一个方法 定义为 返回某种类型的bean，但实际要返回的bean 是在配置文件中配置的。
+			可设计在 可插拔的功能上 解除 程序依赖。
+			/**
+		 * 抽象方法  没有被实现 ，怎么能调用呢
+		 * 答案是 spring为我们提供的获取器
+			public abstract User getBean();
+			此配置是：动态的将teacher 所表示的 bean 作为 getBean的 返回值
+
+			业务逻辑出现 变动时，创建一个新的 类对象 动态的 作为 getBean的返回值 被调用即可 比如
+			Student extends User{}
+			<lookup-method name="getBean" bean="Student"></lookup-method>
+		-->
+		<lookup-method name="getBean" bean="teacher"></lookup-method>
+	</bean>
+	<bean id="teacher" class="com.lin.pojo.Teacher"></bean>
+
+	<bean id="testBean1" class="com.lin.pojo.TestBean1" scope="prototype">
+		<property name="testBean2" ref="testBean2"></property>
+	</bean>
+
+	<bean id="testBean2" class="com.lin.pojo.TestBean2" scope="prototype">
+		<property name="testBean1" ref="testBean1"></property>
+	</bean>
+
+</beans>
